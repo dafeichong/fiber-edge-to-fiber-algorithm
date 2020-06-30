@@ -10,18 +10,26 @@ using namespace cv;
 
 int main()
 {
-	Mat depth_map = imread("depth_map.jpg");
-	Mat mask = imread("projection.jpg");
+	Mat depth_map = imread("full_depth.bmp");
+	Mat mask = imread("skeleton.bmp");
+	resize(depth_map, depth_map, cv::Size(520, 696));
+	resize(mask, mask, cv::Size(520, 696));
 	cvtColor(depth_map, depth_map, CV_BGR2GRAY);
 	cvtColor(mask, mask, CV_BGR2GRAY);
 	threshold(mask, mask, 100, 255, CV_THRESH_BINARY);
+	imwrite("mask.bmp", mask);
+	imwrite("depth.bmp", depth_map);
 	int rows = depth_map.rows;
 	int cols = depth_map.cols;
 	int depth = 120;
 	Voxel voxel(rows, cols, depth);
 	voxel.ImportData(depth_map, mask);
-	int a = voxel.at(20, 25, 45);
-	voxel.WriteToTxt("1.txt", cv::Mat());
+	voxel.PointSpread(4);
+	voxel.Reverse();
+	voxel.Voxel2Slice();
+	
+	//voxel.WriteToTxt("1.txt", cv::Mat());
+
 
 
 	system("pause");
