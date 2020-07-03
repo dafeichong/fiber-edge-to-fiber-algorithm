@@ -16,7 +16,7 @@ Voxel::Voxel(int r, int c, int d)
 	m_rows = r, m_cols = c, m_depth = d;
 	m_slice_offset = r * c, m_row_offset = c;
 	m_length = r * c * d;
-	
+	m_fiber_vol = 0;
 }
 
 Voxel::~Voxel()
@@ -109,6 +109,7 @@ void Voxel::PointSpread(int cnt)
 				}
 			}
 		}
+
 	}
 }
 
@@ -132,6 +133,22 @@ void Voxel::Voxel2Slice(const char* output_filename)
 			return;
 		}
 	}
+}
+
+float Voxel::CalPoreVolume()
+{
+	for (int i = 0; i < m_length; i++)
+	{
+		int d = i / m_slice_offset;
+		int r = (i - d * m_slice_offset) / m_row_offset;
+		int c = (i - d * m_slice_offset - r * m_row_offset);
+		if (at(r, c, d) != 0)
+		{
+			m_fiber_vol++;
+		}
+	}
+	float res = (float)(m_length - m_fiber_vol) / (float)m_length;
+	return res;
 }
 
 void Voxel::Reverse()

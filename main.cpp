@@ -11,7 +11,7 @@ using namespace cv;
 int main()
 {
 	Mat depth_map = imread("full_depth.bmp");
-	Mat mask = imread("skeleton.bmp");
+	Mat mask = imread("new_skeleton.bmp");
 	resize(depth_map, depth_map, cv::Size(520, 696));
 	resize(mask, mask, cv::Size(520, 696));
 	cvtColor(depth_map, depth_map, CV_BGR2GRAY);
@@ -24,12 +24,12 @@ int main()
 	int depth = 120;
 	Voxel voxel(rows, cols, depth);
 	voxel.ImportData(depth_map, mask);
-	voxel.PointSpread(4);
-	voxel.Reverse();
+	voxel.PointSpread(5);
+	//voxel.Reverse();
 	voxel.Voxel2Slice();
 	
 	//voxel.WriteToTxt("1.txt", cv::Mat());
-
+	cout << voxel.CalPoreVolume() << endl;
 
 
 	system("pause");

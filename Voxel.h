@@ -36,6 +36,7 @@ public:
 	void WriteToTxt(const char* output_filename, const cv::Mat& mask);
 	void PointSpread(int cnt);
 	void Voxel2Slice(const char* output_filename = "./output/");
+	float CalPoreVolume();
 	void Reverse();
 	
 
@@ -43,6 +44,7 @@ public:
 	int m_slice_offset, m_row_offset;
 	int m_length;
 private:
+	int m_fiber_vol;
 	int* m_data;
 	queue<Pt> m_q;
 	bool* m_used;
